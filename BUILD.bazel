@@ -1,0 +1,12 @@
+load("@npm//@angular-devkit/architect-cli:index.bzl", "architect")
+
+architect(
+    name = "build",
+    args = ["frontend:build", "--outputPath=$@"],
+    data = glob(["**/*.ts", "**/*.scss", "*.json"], exclude=["node_modules/**"]) + [
+        "@npm//@angular/core",
+        "@npm//@angular/router",
+        "@npm//@angular/platform-browser-dynamic",
+    ],
+    output_dir = True,
+)
