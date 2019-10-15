@@ -1,15 +1,35 @@
 load("@npm//@angular-devkit/architect-cli:index.bzl", "architect")
 
+# FIXME: when we disable custom module resolver, we lose the runfiles of the tool
+# This target expands to
+# npm_package_bin(
+#   name = "build",
+# ...
+#   tool = "@npm//@angular-devkit/architect-cli/bin:architect",
+# )
+# And that tool expands to
+# nodejs_binary(
+#   name = "architect",
+#   data = ["@npm//@angular-devkit/architect-cli:architect-cli", "@npm//@angular/cli:cli", "@npm//@angular/core:core", "@npm//@angular-devkit/architect:architect"],
+# )
+# we need those datas!
+
+_HACK_EXTRA_DATA = [
+    "@npm//@angular-devkit/architect-cli",
+    "@npm//@angular/cli",
+    "@npm//@angular-devkit/build-angular",
+]
+
 architect(
     name = "build",
     args = ["frontend:build", "--outputPath=$@"],
-    data = glob(["src/*.ts", "src/**/*.ts", "src/*.scss"]) + [
+    data = glob(["src/*", "src/**"]) + [
         "angular.json",
         "tsconfig.app.json",
         "tsconfig.json",
         "@npm//@angular/core",
         "@npm//@angular/router",
         "@npm//@angular/platform-browser-dynamic",
-    ],
+    ] + _HACK_EXTRA_DATA,
     output_dir = True,
 )

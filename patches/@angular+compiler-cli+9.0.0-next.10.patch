@@ -1,0 +1,21 @@
+diff --git a/node_modules/@angular/compiler-cli/ngcc/src/writing/package_json_updater.js b/node_modules/@angular/compiler-cli/ngcc/src/writing/package_json_updater.js
+index 413e843..7869e6b 100755
+--- a/node_modules/@angular/compiler-cli/ngcc/src/writing/package_json_updater.js
++++ b/node_modules/@angular/compiler-cli/ngcc/src/writing/package_json_updater.js
+@@ -112,7 +112,15 @@
+             // Ensure the containing directory exists (in case this is a synthesized `package.json` due to a
+             // custom configuration) and write the updated content to disk.
+             this.fs.ensureDir(file_system_1.dirname(packageJsonPath));
+-            this.fs.writeFile(packageJsonPath, JSON.stringify(parsedJson, null, 2) + "\n");
++            try {
++                this.fs.writeFile(packageJsonPath, JSON.stringify(parsedJson, null, 2) + "\n");
++            } catch (e) {
++                // Under Bazel, the input filesystem is readonly
++                if (e.code === 'EROFS') {
++                    console.error('[ivy-ngcc] Readonly filesystem: Cannot write changes to', packageJsonPath);
++                }
++
++            }
+         };
+         return DirectPackageJsonUpdater;
+     }());

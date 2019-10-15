@@ -16,7 +16,7 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 http_archive(
     name = "build_bazel_rules_nodejs",
     patch_args = ["-p1"],
-    patches = ["//:patches/build_bazel_rules_nodejs.pr1273.patch"],
+    patches = ["//:patches/build_bazel_rules_nodejs.patch"],
     sha256 = "ad4be2c6f40f5af70c7edf294955f9d9a0222c8e2756109731b25f79ea2ccea0",
     urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/0.38.3/rules_nodejs-0.38.3.tar.gz"],
 )
@@ -30,7 +30,7 @@ yarn_install(
     package_json = "//:package.json",
     yarn_lock = "//:yarn.lock",
     dynamic_deps = {
-        "@angular-devkit/architect-cli": "@angular/core,@angular/cli",
+        "@angular-devkit/architect-cli": "@angular/core,@angular/cli,@angular-devkit/architect",
     },
 )
 
