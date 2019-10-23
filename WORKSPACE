@@ -15,10 +15,8 @@ workspace(
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 http_archive(
     name = "build_bazel_rules_nodejs",
-    patch_args = ["-p1"],
-    patches = ["//:patches/build_bazel_rules_nodejs.patch"],
-    sha256 = "ad4be2c6f40f5af70c7edf294955f9d9a0222c8e2756109731b25f79ea2ccea0",
-    urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/0.38.3/rules_nodejs-0.38.3.tar.gz"],
+    sha256 = "26c39450ce2d825abee5583a43733863098ed29d3cbaebf084ebaca59a21a1c8",
+    urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/0.39.0/rules_nodejs-0.39.0.tar.gz"],
 )
 
 # The yarn_install rule runs yarn anytime the package.json or yarn.lock file changes.
@@ -27,11 +25,9 @@ load("@build_bazel_rules_nodejs//:index.bzl", "yarn_install")
 yarn_install(
     # Name this npm so that Bazel Label references look like @npm//package
     name = "npm",
+    data = ["//patches"],
     package_json = "//:package.json",
     yarn_lock = "//:yarn.lock",
-    dynamic_deps = {
-        "@angular-devkit/architect-cli": "@angular/core,@angular/cli,@angular-devkit/architect",
-    },
 )
 
 # Install any Bazel rules which were extracted earlier by the yarn_install rule.
