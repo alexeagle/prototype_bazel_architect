@@ -1,9 +1,9 @@
-load("@npm//@angular-devkit/architect-cli:index.bzl", "architect")
+load("@npm//@angular-devkit/architect-cli:index.bzl", "architect", "architect_test")
 
 architect(
     name = "build",
     args = ["frontend:build", "--outputPath=$@"],
-    data = glob(["src/*", "src/**"]) + [
+    data = glob(["src/*", "src/**"], exclude = ["src/**/*.spec.ts"]) + [
         "angular.json",
         "tsconfig.app.json",
         "tsconfig.json",
@@ -15,4 +15,26 @@ architect(
         "@npm//@angular-devkit/build-angular",
     ],
     output_dir = True,
+)
+
+architect_test(
+    name = "test",
+    args = ["frontend:test"],
+    data = glob(["src/*", "src/**"]) + [
+        "angular.json",
+        "karma.conf.js",
+        "tsconfig.spec.json",
+        "tsconfig.json",
+        "@npm//:node_modules",
+        # "@npm//@angular/cli",
+        # "@npm//@angular/core",
+        # "@npm//@angular/router",
+        # "@npm//@angular/platform-browser-dynamic",
+        # "@npm//@angular-devkit/build-angular",
+        # "@npm//karma",
+        # "@npm//karma-chrome-launcher",
+        # "@npm//karma-coverage-istanbul-reporter",
+        # "@npm//karma-jasmine",
+        # "@npm//karma-jasmine-html-reporter",
+    ],
 )
