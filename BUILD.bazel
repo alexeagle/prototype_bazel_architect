@@ -3,8 +3,9 @@ load("@npm//@angular-devkit/architect-cli:index.bzl", "architect", "architect_te
 architect(
     name = "build",
     args = ["frontend:build", "--outputPath=$@"],
-    data = glob(["src/*", "src/**"], exclude = ["src/**/*.spec.ts"]) + [
+    data = glob(["src/*", "src/**"], exclude = ["src/**/*.spec.ts", "src/test.ts"]) + [
         "angular.json",
+        "browserslist",
         "tsconfig.app.json",
         "tsconfig.json",
         "@npm//@angular/cli",
