@@ -1,0 +1,21 @@
+diff --git a/node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/common.js b/node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/common.js
+index 0e0e521..67ee9ce 100644
+--- a/node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/common.js
++++ b/node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/common.js
+@@ -32,7 +32,15 @@ function getCommonConfig(wco) {
+     const { root, projectRoot, buildOptions, tsConfig } = wco;
+     const { styles: stylesOptimization, scripts: scriptsOptimization } = buildOptions.optimization;
+     const { styles: stylesSourceMap, scripts: scriptsSourceMap, vendor: vendorSourceMap, } = buildOptions.sourceMap;
+-    const nodeModules = find_up_1.findUp('node_modules', projectRoot);
++    let nodeModules = undefined;
++
++    if (process.env.TEST_SRCDIR) {
++      // Check why with bazel build this is not resolved but is with bazel test
++      nodeModules = path.join(require.resolve('npm/node_modules/@angular-devkit/build-angular/package.json', '../../../'));
++    } else {
++      nodeModules = find_up_1.findUp('node_modules', projectRoot);
++    }
++
+     if (!nodeModules) {
+         throw new Error('Cannot locate node_modules directory.');
+     }

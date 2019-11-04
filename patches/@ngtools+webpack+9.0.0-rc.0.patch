@@ -1,5 +1,5 @@
 diff --git a/node_modules/@ngtools/webpack/src/ngcc_processor.js b/node_modules/@ngtools/webpack/src/ngcc_processor.js
-index 77f218a..676df46 100644
+index 77f218a..d270644 100644
 --- a/node_modules/@ngtools/webpack/src/ngcc_processor.js
 +++ b/node_modules/@ngtools/webpack/src/ngcc_processor.js
 @@ -49,6 +49,16 @@ class NgccProcessor {
@@ -19,3 +19,15 @@ index 77f218a..676df46 100644
          const timeLabel = `NgccProcessor.processModule.ngcc.process+${moduleName}`;
          benchmark_1.time(timeLabel);
          ngcc_1.process({
+@@ -88,6 +98,11 @@ class NgccProcessor {
+         }
+     }
+     findNodeModulesDirectory(startPoint) {
++        if (process.env.TEST_SRCDIR) {
++            // Check why with bazel build this is not resolved but is with bazel test
++            return path.join(require.resolve('npm/node_modules/@ngtools/webpack/package.json', '../../../'));
++        }
++
+         let current = startPoint;
+         while (path.dirname(current) !== current) {
+             const nodePath = path.join(current, 'node_modules');
